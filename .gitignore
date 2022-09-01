@@ -1,0 +1,9 @@
+# ignore dependencies
+node_modules
+# ignore dotfiles
+# .*
+# ignore configs and locks
+# package*.json
+# *.config.js
+# ignore TODOs
+*TODO
