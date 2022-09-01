@@ -1,0 +1,100 @@
+#game-component {
+    height: 100vh;
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#game-panel {
+    width: 720px;
+    display: flex;
+    flex-flow: row nowrap;
+    font-size: 15px;
+}
+
+#settings {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: center;
+}
+
+#file-io {
+    display: flex;
+    flex-flow: column nowrap;
+    justify-content: space-between;
+}
+
+legend {
+    text-decoration: none;
+    font-size: 17px;
+    font-weight: 500;
+}
+
+input {
+    text-decoration: none;
+    text-align: right;
+}
+
+#text-file-parser span,
+#settings fieldset span {
+    font-size: 13px;
+}
+
+#settings button {
+    margin-top: 10px;
+    width: 100%;
+}
+
+.legend-header {
+    font-size: 23px;
+}
+
+#text-file-parser div,
+#autofold-setting fieldset div {
+    display: flex;
+    flex-flow: row wrap;
+    justify-content: space-between;
+    margin-top: 3px;
+}
+
+#settings > fieldset > div {
+    margin-top: 10px;
+}
+
+#af-delay-txt {
+    width: 50%;
+}
+
+#control-buttons {
+    width: 100%;
+    display: flex;
+    flex-flow: row nowrap;
+    justify-content: space-between;
+}
+
+#control-buttons button {
+    margin-top: 0;
+    width: 15%;
+}
+
+#text-file-parser textarea {
+    resize: none;
+    width: 98%;
+    height: 60px;
+    margin-top: 20px;
+}
+
+#text-file-parser input {
+    text-align: left;
+}
+
+#file-picker {
+    margin-top: 5px;
+    margin-bottom: 5px;
+}
+
+#file-io fieldset:last-child button {
+    margin-top: 10px;
+    width: 100%;
+}

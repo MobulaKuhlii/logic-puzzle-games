@@ -1,0 +1,16 @@
+body {
+    margin: 0;
+    padding: 0;
+}
+
+#root {
+    background-color: tan;
+    display: flex;
+    justify-content: center;
+}
+
+#app {
+    background-color: white;
+    height: 100%;
+    width: 760px;
+}
