@@ -1,9 +1,10 @@
-const path = require("path");
+// const path = require("path");
 
 module.exports = {
     entry: "./src/index.jsx",
     output: {
-        path: path.join(__dirname, "public"),
+        // path: path.join(__dirname, "public"),
+        path: __dirname,
         filename: "index.js"
     },
     module: {
