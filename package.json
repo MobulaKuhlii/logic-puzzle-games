@@ -2,8 +2,9 @@
     "name": "logic-puzzle-games",
     "private": true,
     "scripts": {
-        "build": "webpack-cli --mode development",
-        "start": "webpack-dev-server --mode development",
+        "build-dev": "webpack-cli --config webpack.dev.js",
+        "build": "webpack-cli --config webpack.prod.js",
+        "start": "webpack-dev-server --config webpack.dev.js",
         "lintcss": "npx stylelint \"./src/css/*.css\" --fix"
     },
     "devDependencies": {
