@@ -99,8 +99,7 @@ export class ValueList extends React.Component {
         </div>));
 
         return (
-            <div className={"value-list " + this.props.className}>
-                {/*onMouseLeave={this.handleMouseLeave}*/}
+            <div className={"value-list " + this.props.className} onMouseLeave={this.handleMouseLeave}>
                 {topItem}
                 {items}
             </div>
