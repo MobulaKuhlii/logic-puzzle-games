@@ -7,3 +7,7 @@ node_modules
 # *.config.js
 # ignore TODOs
 *TODO
+# ignore graphics (for now)
+*.jpg
+# ignore old files
+*-old.*
