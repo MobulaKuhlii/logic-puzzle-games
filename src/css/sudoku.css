@@ -1,116 +1,88 @@
-.game-board {
-    width: 720px;
-    height: 720px;
-    border: 0;
-    display: flex;
-    flex-flow: column nowrap;
-    align-items: center;
-    justify-content: baseline;
-    font-size: 23px;
+.grid-container {
+    --grid-side-length: 24rem;
+
+    height: var(--grid-side-length);
+    width: var(--grid-side-length);
+    display: grid;
+    grid-gap: 0;
 }
 
-.game-board .row {
-    width: 100%;
-    border: 1px solid;
-    border-bottom: 0;
-    display: flex;
-    flex-flow: row nowrap;
-    align-items: center;
+#grid-size-9 {
+    --size-9: calc(var(--grid-side-length) / 9);
+    --grid-font-size: calc(var(--grid-side-length) / 13);
+
+    grid-template-columns: repeat(9, var(--size-9));
+    grid-template-rows: repeat(9, var(--size-9));
+    font-size: var(--grid-font-size);
 }
 
-#game-board-size-9 {
-    width: 370px; /* 360 + 9 + 1 */
-    height: 370px;
+.bordered-top {
+    border-top: 1px solid;
 }
 
-.row-size-9 {
-    height: calc(360px / 9);
+.bordered-left {
+    border-left: 1px solid;
 }
 
-#game-board-size-16 {
-    width: 557px;
-    height: 557px;
-}
-
-.row-size-16 {
-    height: calc(540px / 16);
-}
-
-#game-board-size-25 {
-    width: 746px;
-    height: 746px;
-}
-
-.row-size-25 {
-    height: calc(720px / 25);
-}
-
-.value-list {
-    height: 100%;
-    width: 100%;
-}
-
-.value-list-item {
-    margin: 0;
-    padding: 0;
-    position: relative;
-    z-index: 0;
-    display: flex;
-    align-items: center;
-    justify-content: center;
-}
-
-.value-list-item:hover {
-    cursor: pointer;
-    background: gray;
-}
-
-.vl-right {
+.symbol-list {
     border-right: 1px solid;
+    border-bottom: 1px solid;
+    list-style: none;
 }
 
-#row-bot {
+.sl-item {
+    position: relative;
     width: 100%;
-    height: 1px;
-    background: black;
+    height: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    align-items: center;
 }
 
-input {
-    background: none;
-    outline: none;
-    text-decoration: none;
-}
-
-#value-list-input {
-    text-align: center;
-    font-size: 23px;
-}
-
-.sub-square-right {
-    border-right: 2px solid;
-}
-
-.sub-square-bottom {
-    border-bottom: 2px solid;
-}
-
-.row-size-9 .value-list .value-list-item {
-    height: calc(360px / 9);
-    width: calc(360px / 9);
+.sl-item:not(.locked):hover {
+    cursor: pointer;
+    background: var(--bg-color);
+    color: var(--main-color);
 }
 
 .on-top {
     position: relative;
-    z-index: 1;
-    border: 0;
-    background: linear-gradient(gray, lightgray);
+    z-index: var(--top-index);
+    border: 1px solid var(--bg-color);
+    border-top: 0;
+    background-color: var(--snd-color);
 }
 
-.on-top:hover {
-    background: darkblue;
-    color: white;
-}
-
-.locked {
+.sl-item.locked {
     background: yellow;
+}
+
+.sl-item.selected {
+    background: var(--hdr-color);
+    color: var(--main-color);
+    font-weight: bold;
+}
+
+#sl-input-wrapper {
+    position: relative;
+    z-index: var(--below-top-index);
+    padding-bottom: 1px;
+    height: 100%;
+    background: var(--bg-color);
+}
+
+#sl-input-wrapper > input {
+    all: unset;
+    position: relative;
+    z-index: var(--top-index);
+    height: 100%;
+    width: 100%;
+    text-align: center;
+    font-size: var(--grid-font-size);
+}
+
+#sl-input-wrapper > input:focus {
+    background-color: var(--bg-color);
+    color: var(--white);
 }

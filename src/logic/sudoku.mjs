@@ -243,7 +243,7 @@ SudokuClass.defaults = {
     config: {
         length: 9
     },
-    values: (config) => ["-", ...Array.from(config, (_, i) => `${i + 1}`)],
+    values: (config) => ["-", ...Array.from(config, (_, i) => (i + 1).toString(36))],
     output: {
         rowSep: '\n',
         valSep: ' '
@@ -253,5 +253,11 @@ SudokuClass.defaults = {
         valSep: / +/
     }
 };
+
+/*
+        perfect squares, include option for uniqueness on diagonals (Sudoku X),
+        Shi Doku 4, Sudoku 9, Number Place Challenger 16, Sudoku the Giant 25
+    */
+    // regions: Go Doku / Logi-5 - pentomino 5, Roku Doku - 2x3 6, heptomino 7, Hypersudoku / Windoku 9, Maxi (4x3) 12
 
 export const Sudoku = useHistorian(SudokuClass, "setCell solve reset parseText");
