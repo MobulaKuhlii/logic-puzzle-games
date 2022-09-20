@@ -1,0 +1,37 @@
+#sidebar {
+    --indent-unit: 0.5rem;
+    --button-font: 0.9rem;
+}
+
+#sidebar li {
+    list-style: none;
+    display: flex;
+    justify-content: flex-start;
+}
+
+.sidebar-menu-depth-2 {
+    margin-left: var(--indent-unit);
+}
+
+.sidebar-menu-depth-3 {
+    margin-left: calc(2 * var(--indent-unit));
+}
+
+#sidebar li > button {
+    width: 100%;
+    border: none;
+    font-size: var(--button-font);
+    text-align: left;
+}
+
+#sidebar li > button:hover {
+    border: none;
+}
+
+#sidebar li > button:not(:hover) {
+    font-weight: normal;
+}
+
+#sidebar li > button:hover::before {
+    content: "> ";
+}

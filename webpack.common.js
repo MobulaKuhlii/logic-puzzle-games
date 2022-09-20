@@ -3,8 +3,7 @@
 module.exports = {
     entry: "./src/index.jsx",
     output: {
-        // path: path.join(__dirname, "public"),
-        path: __dirname,
+        path: path.join(__dirname, "public"),
         filename: "index.js"
     },
     module: {
