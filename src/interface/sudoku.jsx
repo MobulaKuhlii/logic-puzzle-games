@@ -1,40 +1,44 @@
 import React from "react";
+import "../css/sudoku.css";
 import { Sudoku } from "../logic/sudoku.mjs";
-import { ValueList } from "./value-list.jsx";
-import { withPanel } from "./panel.jsx";
+import { SymbolList } from "./symbol-list.jsx";
+import { gameWithPanel } from "./game-panel.jsx";
 
-class SudokuBoard extends React.Component {
+class SudokuGrid extends React.Component {
+    constructor(props) {
+        super(props);
+    }
     render() {
-        const { game, ...rest } = this.props.synced;
-        const indices = Array.from(game.config, (_, i) => i);
-        return (
-            <div className="game-board" id={`game-board-size-${rest.boardSize}`}>
-                {indices.map(x => (
-                    <div className={`row row-size-${rest.boardSize}`} key={x}>
-                        {indices.map(y => (
-                            <ValueList
-                                className={` ${y + 1 < rest.boardSize  ? "vl-right" : ""}`}
+        const { game, ...synced } = this.props.synced;
+        const range = Array.from(game.config, (_, i) => i);
+        const gridId = "grid-size-" + game.config.length.toString();
+        
+        const grid = (
+            <div id={gridId} className="grid-container">
+                {range.map(x => (
+                    <>
+                        {range.map(y => (
+                            <SymbolList
                                 key={y}
-                                getCell={() => game.getCell.call(game, x, y)}
-                                setCell={(value) => game.setCell.call(game, x, y, value)}
-                                synced={rest}
-                                toggleFlag={this.props.toggleFlag}
-                                lockDelay={700}
+                                className={
+                                    (x > 0 ? "" : "bordered-top") +
+                                    (x > 0 || y > 0 ? "" : " ") +
+                                    (y > 0 ? "" : "bordered-left")
+                                }
+                                synced={synced}
+                                getIndex={() => game.getCell.call(game, x, y)}
+                                setIndex={(value) => game.setCell.call(game, x, y, value)}
                             />
                         ))}
-                    </div>
+                    </>
                 ))}
-                <div id="row-bot"></div>
             </div>
         );
+
+        return grid;
     }
 }
 
-export const SudokuGame = withPanel(SudokuBoard, Sudoku, {
-    displayName: "SudokuGame",
-    textInputOptions: [
-        {prop: "rowSep", label: "Row Separator"},
-        {prop: "valSep", label: "Value Separator"}
-    ],
-    boardSizes: [9, 16, 25]
+export const SudokuComponent = gameWithPanel(SudokuGrid, Sudoku, {
+    displayName: "SudokuComponent"
 });
