@@ -4,6 +4,7 @@ const common = require("./webpack.common.js");
 module.exports = merge(common, {
     mode: "production",
     output: {
-        path: __dirname
+        path: __dirname,
+        filename: "index.js"
     }
 });
