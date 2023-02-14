@@ -1,0 +1,309 @@
+:root {
+    /* spacing */
+    --btn-inner-pad-h: 0.4rem;
+    --btn-inner-pad-v: calc(var(--btn-inner-pad-h) / 2);
+    --content-top-pad: 2rem;
+    --ctrls-top-gap: 1.5rem;
+    --footer-height: 2.5rem;
+    --header-height: 5.5rem;
+    --inner-horiz-pad: 1rem;
+    --panel-top-gap: 3rem;
+    /* indexes */
+    --alert-index: 200;
+    --header-index: 150;
+    --top-index: 100;
+    --below-top-index: 99;
+    /* fonts */
+    --legend-fsize: 1.6rem;
+    --stng-hdr-fsize: calc(0.7 * var(--legend-fsize));
+    --stng-desc-fsize: calc(0.5 * var(--legend-fsize));
+    --stng-lbl-fsize: calc(0.6 * var(--legend-fsize));
+    /* colors */
+    --bg-color: rgb(182, 149, 110);
+    --snd-color: rgb(243, 215, 181);
+    --snd-color-light: rgb(247, 236, 221);
+    --main-color: rgb(255, 255, 255);
+    --hdr-color: rgb(151, 121, 86);
+    --snd-btn-color: rgb(241, 225, 205);
+    --popup-bg-color: rgb(80, 80, 80);
+    --white: rgb(255, 255, 255);
+}
+
+html {
+    background-color: var(--bg-color);
+    box-sizing: border-box;
+}
+
+*,
+*::after,
+*::before {
+    box-sizing: inherit;
+}
+
+html,
+body,
+#root,
+#app {
+    width: 100%;
+    height: 100%;
+}
+
+body,
+button,
+menu {
+    margin: 0;
+    padding: 0;
+}
+
+a {
+    text-decoration: none;
+    color: var(--main-color);
+}
+
+button,
+#btn-like {
+    padding: var(--btn-inner-pad-v) var(--btn-inner-pad-h);
+    border: 1px solid var(--bg-color);
+    background-color: var(--snd-color);
+    font-weight: bold;
+}
+
+#btn-like {
+    margin: var(--inner-horiz-pad) 0;
+    font-size: var(--stng-desc-fsize);
+}
+
+button:hover,
+#btn-like:hover,
+input[type="checkbox"]:hover {
+    cursor: pointer;
+    font-weight: bold;
+}
+
+button:hover,
+#btn-like:hover {
+    background-color: var(--bg-color);
+    color: var(--main-color);
+}
+
+fieldset {
+    margin: 0;
+    border: 1px solid var(--bg-color);
+    border-bottom: 0;
+}
+
+#root {
+    display: grid;
+}
+
+#app {
+    grid-row: 1;
+    grid-column: 1;
+    display: grid;
+    grid-template-rows: var(--header-height) auto var(--footer-height);
+    grid-template-columns: minmax(9rem, 3fr) 10fr;
+    margin: 0 auto;
+    max-width: 900px;
+}
+
+.alert {
+    grid-row: 1;
+    grid-column: 1;
+    z-index: var(--alert-index);
+    width: 100%;
+    display: flex;
+    flex-direction: column;
+    background: var(--popup-bg-color);
+    opacity: 0.9;
+    font-size: var(--legend-fsize);
+    margin: 0 auto;
+    max-width: 1200px;
+}
+
+.alert > div {
+    height: 100%;
+    display: flex;
+    justify-content: center;
+    background: var(--main-color);
+}
+
+.alert > button {
+    align-self: flex-end;
+    border: none;
+    background: none;
+    color: var(--white);
+    font-size: var(--legend-fsize);
+}
+
+#main-header,
+#main-footer {
+    grid-column: 1 / 3;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+    background-color: var(--hdr-color);
+}
+
+#main-header {
+    position: sticky;
+    top: 0;
+    z-index: var(--header-index);
+    grid-row: 1;
+}
+
+#main-footer {
+    grid-row: 3;
+}
+
+#main-header > div,
+#main-footer > div {
+    width: 100%;
+    padding-left: var(--inner-horiz-pad);
+    padding-right: var(--inner-horiz-pad);
+    display: flex;
+    flex-direction: row;
+}
+
+#main-header > div {
+    justify-content: space-between;
+    align-items: flex-end;
+}
+
+#main-footer > div {
+    justify-content: space-evenly;
+    align-items: center;
+}
+
+#sidebar {
+    z-index: var(--top-index);
+    grid-column: 1;
+    padding: var(--content-top-pad) var(--inner-horiz-pad);
+    background-color: var(--snd-color);
+}
+
+#sidebar,
+#game-with-panel {
+    grid-row: 2;
+}
+
+#game-with-panel {
+    grid-column: 2;
+    padding-top: var(--content-top-pad);
+    display: flex;
+    flex-direction: column;
+    justify-content: flex-start;
+    align-items: center;
+    background-color: var(--main-color);
+}
+
+#game-controls {
+    padding-top: var(--ctrls-top-gap);
+    display: flex;
+    justify-content: space-evenly;
+}
+
+#game-panel {
+    padding-top: var(--panel-top-gap);
+    padding-left: var(--inner-horiz-pad);
+    padding-right: var(--inner-horiz-pad);
+    width: 72.5%;
+    display: flex;
+    flex-direction: column;
+}
+
+#game-panel > fieldset {
+    height: 100%;
+    display: flex;
+    flex-direction: column;
+}
+
+#game-panel > fieldset > legend {
+    font-size: var(--legend-fsize);
+}
+
+#settings-buttons {
+    padding-top: calc(var(--ctrls-top-gap) / 2);
+    display: flex;
+    flex-direction: row;
+    justify-content: space-between;
+}
+
+#apply-button {
+    font-size: var(--stng-lbl-fsize);
+    font-weight: bold;
+}
+
+#btn-like > div {
+    width: 100%;
+    display: flex;
+    flex-direction: row;
+    justify-content: center;
+}
+
+#file-picker {
+    height: 0;
+    visibility: hidden;
+}
+
+.ff-button {
+    margin-bottom: calc(var(--panel-top-gap) - 0.5rem);
+    border: none;
+    background-color: var(--snd-btn-color);
+    font-size: var(--stng-hdr-fsize);
+    font-weight: normal;
+}
+
+.ff-button:hover {
+    background-color: var(--snd-color-light);
+    color: rgba(0, 0, 0, 1);
+    font-weight: normal;
+}
+
+.item-with-desc {
+    padding-bottom: calc(var(--ctrls-top-gap) / 2);
+    display: flex;
+    flex-direction: column;
+}
+
+.item-with-desc > header {
+    font-size: var(--stng-hdr-fsize);
+}
+
+.item-with-desc > section {
+    padding-bottom: calc(var(--ctrls-top-gap) / 3);
+}
+
+.item-with-desc > textarea {
+    margin-top: var(--inner-horiz-pad);
+    min-height: calc(10 * var(--inner-horiz-pad));
+}
+
+.item-with-desc > label {
+    display: flex;
+    justify-content: space-between;
+    align-items: baseline;
+    font-size: var(--stng-lbl-fsize);
+}
+
+.item-with-desc > label input[type="text"] {
+    all: unset;
+    padding: 0 var(--btn-inner-pad-h);
+    height: var(--stng-hdr-fsize);
+    outline: 1px solid var(--bg-color);
+    direction: ltr;
+    font-size: var(--stng-lbl-fsize);
+    text-align: right;
+}
+
+.desc-text {
+    font-size: var(--stng-desc-fsize);
+}
+
+.input-suffix {
+    font-size: var(--stng-desc-fsize);
+    padding-left: 0.3rem;
+}
+
+.no-scroll {
+    overflow: hidden;
+}
