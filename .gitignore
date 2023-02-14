@@ -1,13 +1,8 @@
 # ignore dependencies
 node_modules
-# ignore dotfiles
-# .*
-# ignore configs and locks
-# package*.json
-# *.config.js
+# ignore lock file
+package-lock.json
 # ignore TODOs
 *TODO
-# ignore graphics (for now)
-*.jpg
-# ignore old files
-*-old.*
+# ignore sketch graphics
+sketches

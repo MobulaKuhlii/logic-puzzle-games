@@ -1,17 +1,20 @@
 const path = require("path");
 
 module.exports = {
-    entry: "./src/index.jsx",
+    entry: "./src/app.tsx",
     output: {
         path: path.join(__dirname, "public"),
         filename: "index.js"
     },
+    resolve: {
+        extensions: [".tsx", ".ts", ".js"]
+    },
     module: {
         rules: [
             {
-                test: /\.jsx?$/,
+                test: /\.tsx?$/,
                 exclude: /node_modules/,
-                use: "babel-loader"
+                use: "ts-loader"
             },
             {
                 test: /\.css$/,
