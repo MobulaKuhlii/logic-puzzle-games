@@ -1,8 +1,8 @@
-# ignore dependencies
+# dependencies
 node_modules
-# ignore lock file
+# lock file
 package-lock.json
-# ignore TODOs
+# TODOs
 *TODO
-# ignore sketch graphics
+# sketch graphics
 sketches

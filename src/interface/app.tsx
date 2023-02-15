@@ -1,10 +1,9 @@
 import React from "react";
-import * as ReactDOM from "react-dom/client";
-import GameWithPanelT from "./types/game-with-panel";
-import SidebarT from "./types/sidebar";
-import Sidebar from "./interface/sidebar";
-import SudokuComponent from "./interface/sudoku";
-import "./css/app.css";
+import GameWithPanelT from "../types/game-with-panel";
+import SidebarT from "../types/sidebar";
+import Sidebar from "./sidebar";
+import SudokuComponent from "./sudoku";
+import "../css/app.css";
 
 
 type State = Readonly<{
@@ -135,8 +134,4 @@ class App extends React.Component<Record<string, never>, State> {
     }
 }
 
-const root: ReactDOM.Root = ReactDOM.createRoot(
-    document.getElementById("root")
-);
-
-root.render(<App />);
+export default App;
