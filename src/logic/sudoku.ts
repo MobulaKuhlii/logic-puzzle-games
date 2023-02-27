@@ -24,52 +24,53 @@ export const defaults: LogicPuzzleGameT.GameDesc = {
     container for functions describing different regions in sudoku
 */
 const regions: {
-    [name: string]: (size: number, x: number, y: number) => number[][]
+    [name: string]: (size: number, y: number, x: number) => number[][]
 } = {
-    square(size, x, y) {
-        const peers: number[][] = [];
+    square(size, y, x) {
         const sq = Math.sqrt(size);
 
         if(!Number.isInteger(sq)) {
-            throw new Error("Size is not a perfect square number.");
+            throw new Error("Size is not a perfect square.");
         }
+
+        const peers = [];
 
         for(let i = 0; i < size; i++) {
-            if(i !== x) { peers.push([i, y]); }
-            if(i !== y) { peers.push([x, i]); }
+            if(i !== y) { peers.push([i, x]); }
+            if(i !== x) { peers.push([y, i]); }
         }
 
-        const sqrIdx = Math.floor(x / sq) * sq;
-        const sqcIdx = Math.floor(y / sq) * sq;
+        const sqY = Math.floor(y / sq) * sq;
+        const sqX = Math.floor(x / sq) * sq;
 
         for(let i = 0; i < sq; i++) {
             for(let j = 0; j < sq; j++) {
-                if(sqrIdx + i !== x && sqcIdx + j !== y) {
-                    peers.push([sqrIdx + i, sqcIdx + j]);
+                if(sqY + i !== y && sqX + j !== x) {
+                    peers.push([sqY + i, sqX + j]);
                 }
             }
         }
 
         return peers;
     },
-    squareCross(size, x, y) {
-        const peers = regions.square(size, x, y);
+    squareCross(size, y, x) {
+        const peers = regions.square(size, y, x);
         
-        const onMainDiag = x === y;
-        const onRevDiag = x === size - y - 1;
+        const onMainDiag = (y === x);
+        const onRevDiag = (y === size - x - 1);
 
         if(onMainDiag || onRevDiag) {
             for(let i = 0; i < size; i++) {
-                if(onMainDiag && i !== x) { peers.push([i, i]); }
-                if(onRevDiag && i !== x) { peers.push([i, size - i - 1]); }
+                if(onMainDiag && i !== y) { peers.push([i, i]); }
+                if(onRevDiag && i !== y) { peers.push([i, size - i - 1]); }
             }
         }
 
         return peers;
     },
-    pentominoHoriz(size, x, y) { return []; },
-    pentominoVert(size, x, y) { return []; },
-    windoku(size, x, y) { return []; }
+    pentominoHoriz(size, y, x) { return []; },
+    pentominoVert(size, y, x) { return []; },
+    windoku(size, y, x) { return []; }
 }
 
 /*
