@@ -56,7 +56,7 @@ class SymbolList extends React.Component<SymbolListT.Props, SymbolListT.State> {
         }, Number(this.props.synced.autofoldDelay.value));
     }
     handleInput(event: React.FormEvent<HTMLInputElement>) {
-        const prefix: string = this._inputRef.current.value;
+        const prefix = this._inputRef.current.value;
         this.setState({ prefix });
         event.preventDefault();
     }
@@ -84,7 +84,7 @@ class SymbolList extends React.Component<SymbolListT.Props, SymbolListT.State> {
         return ls;
     }
     render(): React.ReactNode {
-        const itemClassName: string = [
+        const itemClassName = [
             "sl-item",
             this.state.unfolded && "on-top",
             this.state.locked && "locked"

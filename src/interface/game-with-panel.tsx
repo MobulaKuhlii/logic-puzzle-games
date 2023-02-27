@@ -111,7 +111,7 @@ function gameWithPanel(
             this.setState(updated);
         }
         handleInput(name: string, event: React.ChangeEvent<HTMLInputElement>) {
-            const value: string = event.target.value;
+            const value = event.target.value;
             if(name.includes("symbols") || name.includes("Delay")) {
                 this.setState({ [name]: name === "symbols" ? value.split("") : value });
             } else {
@@ -121,7 +121,7 @@ function gameWithPanel(
         }
         applySettings(event: React.MouseEvent<HTMLButtonElement>) {
             event.preventDefault();
-            const shouldClamp: boolean = this.state.clamp.on;
+            const shouldClamp = this.state.clamp.on;
 
             this.setState(Object.keys(this.state).reduce((updated, prop) => {
                 if(prop === "symbolsInput") {
@@ -137,7 +137,7 @@ function gameWithPanel(
                 }
                 const option = this.state[prop] as GameWithPanelT.Option;
                 if(prop.includes("Delay")) {
-                    let value: number = parseInt(option.value);
+                    let value = parseInt(option.value);
                     if(Number.isNaN(value)) {
                         if(shouldClamp) {
                             value = this.clamps[prop].default;
