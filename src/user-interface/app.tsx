@@ -1,6 +1,6 @@
 import React from "react";
-import GameWithPanelT from "../types/game-with-panel";
-import SidebarT from "../types/sidebar";
+import GameWithPanelT from "../types/user-interface/game-with-panel";
+import SidebarT from "../types/user-interface/sidebar";
 import Sidebar from "./sidebar";
 import SudokuComponent from "./sudoku";
 import "../css/app.css";

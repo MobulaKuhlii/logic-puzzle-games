@@ -1,5 +1,5 @@
 import React from "react";
-import GameWithPanelT from "../types/game-with-panel";
+import GameWithPanelT from "../types/user-interface/game-with-panel";
 import Sudoku, { defaults } from "../logic/sudoku";
 import SymbolList from "./symbol-list";
 import gameWithPanel from "./game-with-panel";

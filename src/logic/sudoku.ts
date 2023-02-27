@@ -1,4 +1,4 @@
-import LogicPuzzleGameT from "../types/game";
+import LogicPuzzleGameT from "../types/logic/game";
 
 const toRange = (config: LogicPuzzleGameT.Config): number[] => [...Array(config.size)];
 /*

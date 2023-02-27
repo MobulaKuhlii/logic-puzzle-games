@@ -1,5 +1,5 @@
 import React from "react";
-import SidebarT from "../types/sidebar";
+import SidebarT from "../types/user-interface/sidebar";
 import "../css/sidebar.css";
 
 class Sidebar extends React.Component<SidebarT.Props, SidebarT.State> {

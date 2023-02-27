@@ -1,5 +1,5 @@
 import React from "react";
-import GameWithPanelT from "../types/game-with-panel";
+import GameWithPanelT from "../types/user-interface/game-with-panel";
 
 
 const format = (s: string): string => {

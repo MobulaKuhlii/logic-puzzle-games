@@ -1,4 +1,4 @@
-import LogicPuzzleGameT from "./game";
+import LogicPuzzleGameT from "../logic/game";
 
 namespace GameWithPanelT {
     export type Props = Readonly<{

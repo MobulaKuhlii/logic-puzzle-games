@@ -1,7 +1,7 @@
 import React from "react";
 import { render, screen } from "@testing-library/react";
 import "@testing-library/jest-dom";
-import App from "../src/interface/app";
+import App from "../src/user-interface/app";
 
 
 test("quick maths", () => {
