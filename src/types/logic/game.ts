@@ -1,9 +1,10 @@
 export namespace LogicPuzzleGameT {
-    export type Config = Readonly<{
-        size?: number,
-        grid?: Readonly<Readonly<number[]>[]>,
-        region?: string
-    }>;
+    export type Config = Readonly<Partial<{
+        size: number,
+        grid: Readonly<Readonly<number[]>[]>,
+        region: string,
+        algo: string
+    }>>;
 
     export type GameDesc = Readonly<{
         config: Config,
@@ -19,56 +20,52 @@ export namespace LogicPuzzleGameT {
     }>;
 
     export abstract class Cell {
-        public x: number;
-        public y: number;
-        protected _closed: boolean;
-        protected _currentValue: number;
+        public readonly y: number;
+        public readonly x: number;
+        protected _index: number;
+        /* locks cell during solving to prevent unintended mutation */
+        protected _locked: boolean;
     
-        constructor(x: number, y: number) {
-            this.x = x;
+        /* uses mathematical notation for axes */
+        constructor(y: number, x: number, index = 0, locked = false) {
             this.y = y;
-            this._closed = false;
-            this._currentValue = 0;
+            this.x = x;
+            this._index = index;
+            this._locked = locked;
         }
-        abstract get solved(): boolean;
-        abstract get value(): number;
-        abstract setValue(index: number): boolean;
-        abstract serialize(): string;
-        abstract deserialize(repr: string): void;
-        open() {
-            this._closed = false;
+        
+        abstract getIndex(): number;
+        abstract setIndex(index: number): boolean;
+
+        lock() {
+            this._locked = true;
         }
-        close() {
-            this._closed = true;
-            if(this._currentValue > 0) {
-                this.setValue(this._currentValue);
-            }
+        unlock() {
+            this._locked = false;
         }
+        
         toString(): string {
-            return `Cell(${this.x},${this.y})`;
+            return `(${this.y},${this.x}):${this._locked ? '*' : ' '}${this._index}`;
         }
     }
 
     export interface Game {
         getCell(x: number, y: number): Cell;
-        solve(): boolean;
-        reset(): void;
+        solve(name?: string): boolean;
         output(symbols?: string[], rowSep?: string, colSep?: string): string;
-        serialize(): string;
-        deserialize(repr: string): void;
         parse(text: string, symbols?: string[], rowSep?: string, colSep?: string): void;
     }
 
     /*
-        helper type which ensures that return value of
+        helper type ensures that the return value of
         constructor function (or simply - class instance)
         is of the parameterized type T;
-        argument signature specific for single argument
+        argument signature specialized for a single argument
     */
     type Ensure<A, T> = new (arg: A) => T;
 
     /*
-        type of Game class which uses a helper type above to ensure
+        type of Game class uses the helper type above to ensure
         that all instances of GameT implement the Game interface
     */
     export type GameT = Ensure<Config, Game>;

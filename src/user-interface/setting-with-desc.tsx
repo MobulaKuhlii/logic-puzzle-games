@@ -7,30 +7,28 @@ const format = (s: string): string => {
             .replace(/\w+/g, m => m[0].toUpperCase() + m.slice(1).toLowerCase());
 }
 
-
 type Props = GameWithPanelT.Synced & GameWithPanelT.Setting & Readonly<{
     key: number,
     handleInput: (name: string, event: React.ChangeEvent<HTMLInputElement>) => void,
 }>;
-
 
 class SettingWithDesc extends React.Component<Props> {
     render() {
         return (
             <div className="item-with-desc">
                 <header>
-                    <span>{format(this.props.cbx)}</span>
+                    <span>{format(this.props.name)}</span>
                 </header>
                 <section className="desc-text">{this.props.desc}</section>
-                {this.props.cbx && (
+                {this.props.name && (
                     <label>
                         <span>Enabled</span>
                         <input
                             type="checkbox"
                             checked={(
-                                this.props.synced[this.props.cbx] as GameWithPanelT.Option
+                                this.props.synced[this.props.name] as GameWithPanelT.Option
                             ).input}
-                            onChange={(e) => this.props.handleInput(this.props.cbx, e)}
+                            onChange={(e) => this.props.handleInput(this.props.name, e)}
                         ></input>
                     </label>
                 )}

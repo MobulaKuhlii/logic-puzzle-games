@@ -1,9 +1,8 @@
 import React from "react";
 import LogicPuzzleGameT from "../types/logic/game";
 import GameWithPanelT from "../types/user-interface/game-with-panel";
-import FoldableFieldset from "./foldable-fieldset";
-import SettingWithDesc from "./setting-with-desc";
-import BrowserTextFileParser from "./browser-text-file-parser";
+import GameControls from "./game-controls";
+import Panel from "./panel";
 
 
 function gameWithPanel(
@@ -21,8 +20,6 @@ function gameWithPanel(
     > {
         private initialState: GameWithPanelT.InitialState;
         private clamps: { [name: string]: { min: number, max: number, default: number } };
-        //private controls: string[];
-        private settings: GameWithPanelT.Setting[];
         public displayName: string;
 
         constructor(props: GameWithPanelT.Props) {
@@ -53,23 +50,6 @@ function gameWithPanel(
                 symbolsInput: "",
                 ...this.initialState
             };
-
-            //this.controls = "Check Undo Redo Solve Reset".split(' ');
-
-            this.settings = [
-                {
-                    cbx: "lock", inp: "lockDelay", suffix: "ms",
-                    desc: "Lock or unlock cell's value by holding left-click for specified duration."
-                },
-                {
-                    cbx: "autofold", inp: "autofoldDelay", suffix: "ms",
-                    desc: "Fold cell's list and set first matching value when moving cursor outside of it."
-                },
-                {
-                    cbx: "clamp",
-                    desc: "Prevent invalid or extreme values for other settings using sensible defaults."
-                }
-            ];
         }
         componentDidUpdate() {
             if(this.state.parsed) {
@@ -78,19 +58,6 @@ function gameWithPanel(
                 this.setState({ reset: false });
             }
         }
-        /* handleCheck() {
-            if(Game.validate(this.state.game)) {
-                this.props.handleAlert("Board correct");
-            } else {
-                this.props.handleAlert("Board incorrect");
-            }
-        } */
-        /* handleUndo() {
-            this.setState({ game: this.state.game.undo() });
-        } */
-        /* handleRedo() {
-            this.setState({ game: this.state.game.redo() });
-        } */
         handleSolve() {
             const tStart = Number(new Date());
             const solved = this.state.game.solve();
@@ -102,12 +69,16 @@ function gameWithPanel(
             }
         }
         handleReset(all = false) {
-            this.state.game.reset();
             const updated: Partial<GameWithPanelT.State> = all ? {
+                game: new Game(config),
                 symbols: getSymbols(config),
+                symbolsInput: "",
                 ...this.initialState,
                 reset: true
-            } : { reset: true };
+            } : {
+                game: new Game(config),
+                reset: true
+            };
             this.setState(updated);
         }
         handleInput(name: string, event: React.ChangeEvent<HTMLInputElement>) {
@@ -166,69 +137,19 @@ function gameWithPanel(
             return (
                 <div id="game-with-panel">
                     <GameComponent synced={this.state} />
-                    <div id="game-controls">
-                        <button onClick={() => this.handleSolve()}>
-                            Solve
-                        </button>
-                        <button onClick={() => this.handleReset()}>
-                            Reset
-                        </button>
-                    </div>
-                    <div id="game-panel">
-                        <FoldableFieldset legend="Settings">
-                            <div className="item-with-desc">
-                                <header>
-                                    <span>Symbols</span>
-                                </header>
-                                <section className="desc-text">
-                                    Use provided symbols, limited or padded to grid size, instead of default.
-                                </section>
-                                <label>
-                                    <span>Symbols</span>
-                                    <input
-                                        type="text"
-                                        placeholder={this.state.symbols.join("")}
-                                        onChange={(e) => this.handleInput("symbols", e)}
-                                    ></input>
-                                </label>
-                            </div>
-                            {this.settings.map((props, key) => (
-                                <SettingWithDesc
-                                    key={key}
-                                    {...props}
-                                    synced={this.state}
-                                    handleInput={(name, e) => this.handleInput(name, e)}
-                                />
-                            ))}
-                            <div id="settings-buttons">
-                                <button onClick={() => this.handleReset(true)}>
-                                    Reset Everything
-                                </button>
-                                <button id="apply-button" onClick={(e) => this.applySettings(e)}>
-                                    Apply
-                                </button>
-                            </div>
-                        </FoldableFieldset>
-                        <FoldableFieldset legend="Game IO">
-                            <div className="item-with-desc">
-                                <header>
-                                    <span>Output</span>
-                                </header>
-                                <section className="desc-text">
-                                    Show current game state as a plain text.
-                                </section>
-                                <button id="game-output" onClick={() => this.props.handleClipboard(this.outputAsText())}>
-                                    Show
-                                </button>
-                            </div>
-                            <div className="item-with-desc">
-                                <header>
-                                    <span>Input</span>
-                                </header>
-                                <BrowserTextFileParser handleTextParse={(o) => this.handleTextParse(o)} />
-                            </div>
-                        </FoldableFieldset>
-                    </div>
+                    <GameControls
+                        handleSolve={() => this.handleSolve()}
+                        handleReset={() => this.handleReset()}
+                    />
+                    <Panel
+                        synced={this.state}
+                        handleSymbols={this.handleInput.bind(this, "symbols")}
+                        handleInput={(name, e) => this.handleInput(name, e)}
+                        handleResetAll={() => this.handleReset(true)}
+                        handleApplySettings={(e) => this.applySettings(e)}
+                        handleOutput={() => this.props.handleClipboard(this.outputAsText())}
+                        handleTextParse={(o) => this.handleTextParse(o)}
+                    />
                 </div>
             );
         }

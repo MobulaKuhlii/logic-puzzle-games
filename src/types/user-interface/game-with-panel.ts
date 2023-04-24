@@ -44,7 +44,7 @@ namespace GameWithPanelT {
     }>;
 
     export type Setting = Readonly<{
-        cbx: string,
+        name: string,
         inp?: string,
         suffix?: string,
         desc: string

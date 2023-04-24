@@ -1,15 +1,18 @@
 import LogicPuzzleGameT from "../types/logic/game";
 
-const toRange = (config: LogicPuzzleGameT.Config): number[] => [...Array(config.size)];
+
 /*
     configuration defaults for sudoku
 */
 export const defaults: LogicPuzzleGameT.GameDesc = {
     config: {
         size: 9,
-        region: "square"
+        region: "square",
+        algo: "cps"
     },
-    symbols: (config) => ["-", ...toRange(config).map((_, i) => (i + 1).toString(36))],
+    symbols: (config) => [
+        "-", ...Array.from({length: config.size}, (_, i) => (i + 1).toString(36))
+    ],
     output: {
         row: '\n',
         value: ' '
@@ -20,186 +23,151 @@ export const defaults: LogicPuzzleGameT.GameDesc = {
     }
 }
 
+
 /*
-    container for functions describing different regions in sudoku
+    generator functions for peers of a cell based on a selected region type
 */
-const regions: {
-    [name: string]: (size: number, y: number, x: number) => number[][]
-} = {
-    square(size, y, x) {
-        const sq = Math.sqrt(size);
+type ReGenT = (size: number, y: number, x: number) => Generator<number[]>;
 
-        if(!Number.isInteger(sq)) {
-            throw new Error("Size is not a perfect square.");
+const regions: { [name: string]: ReGenT } = {
+    *square(size, y, x) {
+        const k = Math.sqrt(size);
+
+        if(!Number.isInteger(k)) {
+            return;
         }
-
-        const peers = [];
 
         for(let i = 0; i < size; i++) {
-            if(i !== y) { peers.push([i, x]); }
-            if(i !== x) { peers.push([y, i]); }
+            if(i !== y) { yield [i, x]; }
+            if(i !== x) { yield [y, i]; }
         }
 
-        const sqY = Math.floor(y / sq) * sq;
-        const sqX = Math.floor(x / sq) * sq;
+        const ky = Math.floor(y / k) * k;
+        const kx = Math.floor(x / k) * k;
 
-        for(let i = 0; i < sq; i++) {
-            for(let j = 0; j < sq; j++) {
-                if(sqY + i !== y && sqX + j !== x) {
-                    peers.push([sqY + i, sqX + j]);
+        for(let i = 0; i < k; i++) {
+            for(let j = 0; j < k; j++) {
+                if(ky + i !== y && kx + j !== x) {
+                    yield [ky + i, kx + j];
                 }
             }
         }
-
-        return peers;
     },
-    squareCross(size, y, x) {
-        const peers = regions.square(size, y, x);
+    *squareCross(size, y, x) {
+        yield* regions.square(size, y, x);
         
         const onMainDiag = (y === x);
         const onRevDiag = (y === size - x - 1);
 
         if(onMainDiag || onRevDiag) {
             for(let i = 0; i < size; i++) {
-                if(onMainDiag && i !== y) { peers.push([i, i]); }
-                if(onRevDiag && i !== y) { peers.push([i, size - i - 1]); }
+                if(onMainDiag && i !== y) { yield [i, i]; }
+                if(onRevDiag && i !== y) { yield [i, size - i - 1]; }
             }
         }
-
-        return peers;
-    },
-    pentominoHoriz(size, y, x) { return []; },
-    pentominoVert(size, y, x) { return []; },
-    windoku(size, y, x) { return []; }
+    } /*,
+    *pentominoHoriz(size, y, x) {},
+    *pentominoVert(size, y, x) {},
+    *windoku(size, y, x) {} */
 }
 
+
 /*
-    class describing a single field / cell in sudoku
-    - currently includes implementation details of solver algorithm
+    describes a single cell of sudoku game
+    with CPS algorithm specific implementation
 */
-class SudokuCell extends LogicPuzzleGameT.Cell {
-    private _values: Set<number>;
-    private _range: number[];
-    public peers: Set<SudokuCell>;
+class CellCPS extends LogicPuzzleGameT.Cell {
+    private _msize: number;
+    public indices: Set<number>;
+    public peers: Set<CellCPS>;
 
-    constructor(range: number[], x: number, y: number) {
-        super(x, y);
-        this._values = new Set();
-        this._range = range;
-        this.peers = new Set();
-    }
-
-    toString(): string {
-        return `Cell(${this.x},${this.y})`;
-    }
-
-    open() {
-        super.open();
-        this._range.forEach(value => this._values.add(value));
-    }
-
-    close() {
-        this._closed = true;
-        if(this._currentValue) {
-            this.setValue(this._currentValue);
-        }
-    }
-    
-    get value(): number {
-        if(!this._closed) {
-            return this._currentValue;
-        }
-        if(this.solved) {
-            return this._values.values().next().value;
-        }
-    }
-    
-    setValue(index: number): boolean {
-        if(!this._closed) {
-            this._currentValue = index;
-            return false;
-        }
-        for(const other of this.peers) {
-            if(other.solved && other.value === index) {
-                return false;
-            }
-        }
-        const oldValues: Set<number> = this._values;
-        this._values = new Set<number>().add(index);
-
-        for(const other of this.peers) {
-            if(other.values.delete(index)) {
-                if(other.solved) {
-                    if(!other.setValue(other.value)) {
-                        other.values.add(index);
-                        this._values = oldValues;
-                        return false;
-                    }
-                } else {
-                    other.values.add(index);
-                }
-            }
-        }
-        this._currentValue = index;
-        return true;
-    }
-
-    set values(newValues: Set<number>) {
-        this._values = newValues;
-    }
-
-    get values(): Set<number> {
-        return this._values;
+    constructor(size: number, y: number, x: number) {
+        super(y, x);
+        this._msize = size + 1;
     }
 
     get solved(): boolean {
-        return this._values.size === 1;
+        return this.indices.size === 1;
     }
 
-    serialize(): string {
-        return JSON.stringify(this, (key, value) => {
-            if(!key || key === "_currentValue") {
-                return value;
-            }
-        });
+    getIndex(): number {
+        if(!this._locked) { return this._index; }
+        if(this.solved) { return [...this.indices].pop(); }
     }
-    deserialize(text: string) {
-        Object.assign(this, JSON.parse(text));
+
+    setIndex(index: number) {
+        if(!this._locked) {
+            this._index = index;
+            return false;
+        }
+
+        for(const other of this.peers) {
+            if(other.solved && other.getIndex() === index) {
+                return false;
+            }
+        }
+
+        const indicesRef = this.indices;
+        this.indices = new Set<number>().add(index);
+
+        for(const other of this.peers) {
+            if(other.indices.delete(index)) {
+                if(other.solved) {
+                    if(!other.setIndex(other.getIndex())) {
+                        other.indices.add(index);
+                        this.indices = indicesRef;
+                        return false;
+                    }
+                } else {
+                    other.indices.add(index);
+                }
+            }
+        }
+
+        this._index = index;
+        return true;
+    }
+
+    lock() {
+        super.lock();
+        if(this._index > 0) {
+            this.setIndex(this._index);
+        }
+    }
+
+    unlock() {
+        super.unlock();
+        this.indices = new Set(Array(this._msize).keys());
     }
 }
 
-/*
-    class describing a game of sudoku
-    - manages game state
-    - provides solver
-    - includes helper functions for input / output
-*/
+
 class Sudoku implements LogicPuzzleGameT.Game {
-    private _grid: SudokuCell[][];
+    private _grid: CellCPS[][];
+    private _algo: string;
 
-    constructor(config: LogicPuzzleGameT.Config) {
-        this.init(config);
-    }
-    /* re-use instance (for now?) */
-    init(config: LogicPuzzleGameT.Config) {
-
+    constructor(config = defaults.config) {
         const createBoard = () => {
-            const range: number[] = toRange(config).map(i => i + 1);
-            this._grid = range.map(x => range.map(y => new SudokuCell(range, x - 1, y - 1)));
+            const it = {length: config.size};
+            this._grid = Array.from(it, (_, y) =>
+                Array.from(it, (_, x) => new CellCPS(config.size, y, x)));
         }
 
         const populatePeers = () => {
-            this._grid.forEach((row, x) => row.forEach((cell, y) =>
-                regions[config.region](config.size, x, y).forEach(
-                    ([x, y]) => cell.peers.add(this._grid[x][y]))));
+            const reGen = regions[config.region];
+            this._grid.forEach((row, y) => {
+                row.forEach((cell, x) => {
+                    for(const [yy, xx] of reGen(config.size, y, x)) {
+                        cell.peers.add(this._grid[yy][xx]);
+                    }
+                });
+            });
         }
 
         const fillBoard = () => {
-            config?.grid?.forEach((row, x) => {
-                row.forEach((value, y) => {
-                    if(value > 0) {
-                        this._grid[x][y].setValue(value);
-                    }
+            config?.grid?.forEach((row, y) => {
+                row.forEach((idx, x) => {
+                    if(idx > 0) { this._grid[x][y].setIndex(idx); }
                 });
             });
         }
@@ -207,86 +175,79 @@ class Sudoku implements LogicPuzzleGameT.Game {
         createBoard();
         populatePeers();
         fillBoard();
+        this._algo = config?.algo ?? defaults.config.algo;
     }
 
-    getCell(x: number, y: number): SudokuCell {
-        return this._grid?.[x]?.[y];
+    getCell(y: number, x: number): LogicPuzzleGameT.Cell {
+        return this._grid?.[y]?.[x];
     }
 
-    solve(): boolean {
-        this._grid.forEach(row => row.forEach(cell => cell.close()));
+    solve(algo = this._algo): boolean {
+        if(algo === "cps") {
+            return this._cps();
+        }
+        return false;
+    }
+
+    private _cps(): boolean {
+        this._grid.forEach(row => row.forEach(cell => cell.lock()));
 
         const search = (): boolean => {
-            const unsolved: SudokuCell[] = this._grid.flatMap(row => row.filter(cell => !cell.solved));
+            const unsolved = this._grid.flatMap(row => row.filter(cell => !cell.solved));
             if(!unsolved.length) {
                 return true;
             }
 
-            const minCell: SudokuCell = unsolved.reduce((c1, c2) => c1.values.size < c2.values.size ? c1 : c2);
-            const copy: Set<number>[] = unsolved.map(cell => new Set(cell.values));
+            const minCell = unsolved.reduce((c1, c2) => c1.indices.size < c2.indices.size ? c1 : c2);
+            const copy = unsolved.map(cell => new Set(cell.indices));
 
-            return Array.from(minCell.values).some(index => {
-                if(minCell.setValue(index) && search()) {
+            return Array.from(minCell.indices).some(idx => {
+                if(minCell.setIndex(idx) && search()) {
                     return true;
                 }
-                copy.forEach((oldIndices, idx) => {
-                    unsolved[idx].values = oldIndices;
+                copy.forEach((indicesPrev, i) => {
+                    unsolved[i].indices = indicesPrev;
                 });
                 return false;
             });
         }
 
         const result: boolean = search();
-        this._grid.forEach(row => row.forEach(cell => cell.open()));
+        this._grid.forEach(row => row.forEach(cell => cell.unlock()));
 
         return result;
     }
 
-    reset() {
-        this._grid.forEach(row => row.forEach(cell => cell.setValue(0)));
-    }
-
     output(
         symbols: string[] = defaults.symbols(defaults.config),
-        rowSep: string = defaults.output.row,
-        valSep: string = defaults.output.value,
+        rSep: string = defaults.output.row,
+        vSep: string = defaults.output.value,
     ): string {
         return this._grid.map(row => row.map(cell =>
-            symbols[cell.value]).join(valSep)).join(rowSep);
-    }
-
-    serialize(): string {
-        return JSON.stringify(this, (_key, value) => value?.serialize() ?? value);
-    }
-    
-    deserialize(repr: string) {
-        const { board, ...rest }: { board: string[][] } = JSON.parse(repr);
-
-        board.forEach((row, x) => row.forEach((value, y) => this.getCell(x, y).deserialize(value)));
-
-        Object.assign(this, rest);
+            symbols[cell.getIndex()]).join(vSep)).join(rSep);
     }
 
     parse(
         text: string,
         symbols: string[] = defaults.symbols(defaults.config),
-        rowSep: string = defaults.input.row,
-        valSep: string = defaults.input.value,
-    ) {
-        const convert = (val: string): string | RegExp => {
-            if(typeof val === "string" && val.length > 1 && val.startsWith('/') && val.endsWith('/')) {
-                return new RegExp(val);
-            }
-            return val;
-        }
+        rSep: string = defaults.input.row,
+        vSep: string = defaults.input.value,
+    ): LogicPuzzleGameT.Config {
+        const convert = (sep: string): RegExp | string =>
+            /^\/.+\/$/.test(sep) ? new RegExp(sep) : sep;
 
-        const valSepConv: string | RegExp = convert(valSep);
-        const grid: number[][] = text.trim().split(convert(rowSep)).map(rowStr =>
-            rowStr.split(valSepConv).map(sym => symbols.indexOf(sym)));
-        
-        const config: LogicPuzzleGameT.Config = { size: grid.length, grid, region: "square" };
-        this.init(config);
+        const vSepConv = convert(vSep);
+        const grid = text.trim().split(convert(rSep)).map(rowStr =>
+            rowStr.split(vSepConv).map(sym => symbols.indexOf(sym)));
+
+        return {
+            grid,
+            size: grid.length,
+            region: "square"
+        };
     }
+
+    /* static validate(grid: number[][], region = "square") {} */
 }
 
 export default Sudoku;
