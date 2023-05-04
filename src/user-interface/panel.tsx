@@ -78,7 +78,7 @@ class Panel extends React.Component<Props> {
                             <span>Output</span>
                         </header>
                         <section className="desc-text">
-                            Show current game state as a plain text.
+                            Show current game state as plain text.
                         </section>
                         <button id="game-output" onClick={this.props.handleOutput}>
                             Show

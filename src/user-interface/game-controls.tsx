@@ -10,34 +10,25 @@ type Props = Readonly<{
 }>;
 
 class GameControls extends React.Component<Props> {
+    condButton(action: string) {
+        return (
+            <>
+                {this.props["handle" + action] && (
+                    <button onClick={this.props["handle" + action]}>
+                        {action}
+                    </button>
+                )}
+            </>
+        );
+    }
     render() {
         return (
             <div id="game-controls">
-                {this.props.handleUndo && (
-                    <button onClick={this.props.handleUndo}>
-                        Undo
-                    </button>
-                )}
-                {this.props.handleRedo && (
-                    <button onClick={this.props.handleRedo}>
-                        Redo
-                    </button>
-                )}
-                {this.props.handleCheck && (
-                    <button onClick={this.props.handleCheck}>
-                        Check
-                    </button>
-                )}
-                {this.props.handleSolve && (
-                    <button onClick={this.props.handleSolve}>
-                        Solve
-                    </button>
-                )}
-                {this.props.handleReset && (
-                    <button onClick={this.props.handleReset}>
-                        Reset
-                    </button>
-                )}
+                {this.condButton("Undo")}
+                {this.condButton("Redo")}
+                {this.condButton("Check")}
+                {this.condButton("Solve")}
+                {this.condButton("Reset")}
             </div>
         );
     }

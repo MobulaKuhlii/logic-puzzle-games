@@ -5,6 +5,7 @@ import SymbolList from "./symbol-list";
 import gameWithPanel from "./game-with-panel";
 import "../css/sudoku.css";
 
+
 class SudokuGrid extends React.Component<GameWithPanelT.Synced> {
     render(): React.ReactNode {
         const { game } = this.props.synced;
@@ -13,21 +14,23 @@ class SudokuGrid extends React.Component<GameWithPanelT.Synced> {
         
         const grid = (
             <div id={gridId} className="grid-container">
-                {range.map(x => (
+                {range.map(y => (
                     <>
-                        {range.map(y => (
-                            <SymbolList
-                                key={y}
-                                className={
-                                    (x > 0 ? "" : "bordered-top") +
-                                    (x > 0 || y > 0 ? "" : " ") +
-                                    (y > 0 ? "" : "bordered-left")
-                                }
-                                synced={this.props.synced}
-                                getIndex={() => game.getCell.call(game, x, y).value}
-                                setIndex={game.getCell.call(game, x, y).setValue}
-                            />
-                        ))}
+                        {range.map(x => {
+                            return (
+                                <SymbolList
+                                    key={100 * y + x}
+                                    className={
+                                        (y > 0 ? "" : "bordered-top") +
+                                        (y > 0 || x > 0 ? "" : " ") +
+                                        (x > 0 ? "" : "bordered-left")
+                                    }
+                                    synced={this.props.synced}
+                                    getIndex={() => game.getIndex(y, x)}
+                                    setIndex={(index) => game.setIndex(y, x, index)}
+                                />
+                            );
+                        })}
                     </>
                 ))}
             </div>

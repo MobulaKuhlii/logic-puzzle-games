@@ -84,6 +84,7 @@ class CellCPS extends LogicPuzzleGameT.Cell {
     constructor(size: number, y: number, x: number) {
         super(y, x);
         this._msize = size + 1;
+        this.peers = new Set();
     }
 
     get solved(): boolean {
@@ -178,8 +179,12 @@ class Sudoku implements LogicPuzzleGameT.Game {
         this._algo = config?.algo ?? defaults.config.algo;
     }
 
-    getCell(y: number, x: number): LogicPuzzleGameT.Cell {
-        return this._grid?.[y]?.[x];
+    getIndex(y: number, x: number) {
+        return this._grid?.[y]?.[x]?.getIndex();
+    }
+
+    setIndex(y: number, x: number, index: number): boolean {
+        return Boolean(this._grid?.[y]?.[x]?.setIndex(index));
     }
 
     solve(algo = this._algo): boolean {

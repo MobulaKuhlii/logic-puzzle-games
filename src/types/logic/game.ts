@@ -23,7 +23,7 @@ export namespace LogicPuzzleGameT {
         public readonly y: number;
         public readonly x: number;
         protected _index: number;
-        /* locks cell during solving to prevent unintended mutation */
+        /* locks cell while solving to prevent mutation */
         protected _locked: boolean;
     
         /* uses mathematical notation for axes */
@@ -50,8 +50,9 @@ export namespace LogicPuzzleGameT {
     }
 
     export interface Game {
-        getCell(x: number, y: number): Cell;
-        solve(name?: string): boolean;
+        getIndex(y: number, x: number): number;
+        setIndex(y: number, x: number, index :number): boolean; // returns if success
+        solve(name?: string): boolean; // returns if success
         output(symbols?: string[], rowSep?: string, colSep?: string): string;
         parse(text: string, symbols?: string[], rowSep?: string, colSep?: string): void;
     }
