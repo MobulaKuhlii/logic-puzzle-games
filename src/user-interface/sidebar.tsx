@@ -2,6 +2,7 @@ import React from "react";
 import SidebarT from "../types/user-interface/sidebar";
 import "../css/sidebar.css";
 
+
 class Sidebar extends React.Component<SidebarT.Props, SidebarT.State> {
     private _buildNestedMenu: (node: SidebarT.Node, key?: number) => React.ReactNode;
 

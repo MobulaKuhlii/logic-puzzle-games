@@ -1,19 +1,9 @@
 import React from "react";
+import FFT from "../types/user-interface/foldable-fieldset";
 
 
-type Props = Readonly<{
-    legend: string,
-    id?: string,
-    children: React.ReactNode[]
-}>;
-
-type State = Readonly<{
-    unfolded: boolean
-}>;
-
-
-class FoldableFieldset extends React.Component<Props, State> {
-    constructor(props: Props) {
+class FoldableFieldset extends React.Component<FFT.Props, FFT.State> {
+    constructor(props: FFT.Props) {
         super(props);
         this.state = {unfolded: true};
     }

@@ -1,24 +1,15 @@
 import React from "react";
 import GameWithPanelT from "../types/user-interface/game-with-panel";
+import PanelT from "../types/user-interface/panel";
 import FoldableFieldset from "./foldable-fieldset";
 import SettingWithDesc from "./setting-with-desc";
 import BrowserTextFileParser from "./browser-text-file-parser";
 
 
-type Props = GameWithPanelT.Synced & Readonly<{
-    settings?: string[],
-    handleSymbols: (event: React.ChangeEvent<HTMLInputElement>) => void,
-    handleInput: (name: string, event: React.ChangeEvent<HTMLInputElement>) => void,
-    handleResetAll: () => void,
-    handleApplySettings: (event: React.MouseEvent<HTMLButtonElement>) => void,
-    handleOutput: () => void,
-    handleTextParse: (text: string) => void,
-}>;
-
-class Panel extends React.Component<Props> {
+class Panel extends React.Component<PanelT.Props> {
     private gameSettings: GameWithPanelT.Setting[];
 
-    constructor(props: Props) {
+    constructor(props: PanelT.Props) {
         super(props);
 
         this.gameSettings = [

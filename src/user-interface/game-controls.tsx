@@ -1,15 +1,8 @@
 import React from "react";
+import GameControlsT from "../types/user-interface/game-controls";
 
 
-type Props = Readonly<{
-    handleUndo?: () => void,
-    handleRedo?: () => void,
-    handleCheck?: () => void,
-    handleSolve?: () => void,
-    handleReset?: () => void
-}>;
-
-class GameControls extends React.Component<Props> {
+class GameControls extends React.Component<GameControlsT.Props> {
     condButton(action: string) {
         return (
             <>

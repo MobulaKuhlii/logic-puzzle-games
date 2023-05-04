@@ -1,5 +1,6 @@
 import React from "react";
 import GameWithPanelT from "../types/user-interface/game-with-panel";
+import SettingWithDescT from "../types/user-interface/setting-with-desc";
 
 
 const format = (s: string): string => {
@@ -7,12 +8,7 @@ const format = (s: string): string => {
             .replace(/\w+/g, m => m[0].toUpperCase() + m.slice(1).toLowerCase());
 }
 
-type Props = GameWithPanelT.Synced & GameWithPanelT.Setting & Readonly<{
-    key: number,
-    handleInput: (name: string, event: React.ChangeEvent<HTMLInputElement>) => void,
-}>;
-
-class SettingWithDesc extends React.Component<Props> {
+class SettingWithDesc extends React.Component<SettingWithDescT.Props> {
     render() {
         return (
             <div className="item-with-desc">

@@ -1,20 +1,11 @@
 import React from "react";
+import BTFPT from "../types/user-interface/browser-text-file-parser";
 
 
-type Props = Readonly<{
-    text?: string,
-    handleTextParse: (text: string) => void,
-}>;
-
-type State = Readonly<{
-    text: string
-}>;
-
-
-class BrowserTextFileParser extends React.Component<Props, State> {
+class BrowserTextFileParser extends React.Component<BTFPT.Props, BTFPT.State> {
     private _fileInputRef: React.RefObject<HTMLInputElement>;
 
-    constructor(props: Props) {
+    constructor(props: BTFPT.Props) {
         super(props);
         this.state = { text: props?.text ?? "Paste here." };
         this._fileInputRef = React.createRef();

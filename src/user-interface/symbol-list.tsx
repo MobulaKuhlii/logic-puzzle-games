@@ -1,6 +1,7 @@
 import React from "react";
 import SymbolListT from "../types/user-interface/symbol-list";
 
+
 class SymbolList extends React.Component<SymbolListT.Props, SymbolListT.State> {
     private _inputRef: React.RefObject<HTMLInputElement>;
 

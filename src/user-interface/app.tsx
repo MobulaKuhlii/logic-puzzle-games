@@ -1,28 +1,13 @@
 import React from "react";
-import GameWithPanelT from "../types/user-interface/game-with-panel";
+import AppT from "../types/user-interface/app";
 import SidebarT from "../types/user-interface/sidebar";
 import Sidebar from "./sidebar";
 import SudokuComponent from "./sudoku";
 import "../css/app.css";
 
 
-type State = Readonly<{
-    alert: boolean,
-    clipboard: boolean,
-    name: string,
-    message: string
-}>;
-
-
-type GameDesc = {
-    Component: GameWithPanelT.Component,
-    menu: SidebarT.Block,
-    menuHandler: (node: SidebarT.Node) => Partial<State> | null
-}
-
-
 const games: {
-    [name: string]: GameDesc
+    [name: string]: AppT.GameDesc
 } = {
     sudoku: {
         Component: SudokuComponent,
@@ -67,7 +52,7 @@ const sidebarRoot: SidebarT.Block = [
 ];
 
 
-class App extends React.Component<Record<string, never>, State> {
+class App extends React.Component<Record<string, never>, AppT.State> {
     constructor(props: Record<string, never>) {
         super(props);
         this.state = {
