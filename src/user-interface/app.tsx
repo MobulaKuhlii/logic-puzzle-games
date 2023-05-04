@@ -6,10 +6,8 @@ import SudokuComponent from "./sudoku";
 import "../css/app.css";
 
 
-const games: {
-    [name: string]: AppT.GameDesc
-} = {
-    sudoku: {
+const games: Map<string, AppT.GameDesc> = new Map([
+    [   "sudoku", {
         Component: SudokuComponent,
         menu: [
             "sudoku", [
@@ -43,12 +41,12 @@ const games: {
             }
             return null;
         }
-    }
-}
+    }]
+]);
 
 
 const sidebarRoot: SidebarT.Block = [
-    "", Object.keys(games).map(name => games[name].menu)
+    "", Array.from(games.values(), gameDesc => gameDesc.menu)
 ];
 
 
@@ -64,13 +62,13 @@ class App extends React.Component<Record<string, never>, AppT.State> {
         this.handleSidebarClick = this.handleSidebarClick.bind(this);
     }
     handleSidebarClick(node: SidebarT.Node) {
-        const updated = games[this.state.name].menuHandler(node);
+        const updated = games.get(this.state.name).menuHandler(node);
         if(updated !== null) {
             this.setState({ ...this.state, ...updated });
         }
     }
     render(): React.ReactNode {
-        const GameComponent = games[this.state.name].Component;
+        const GameComponent = games.get(this.state.name).Component;
         const header = (
             <header id="main-header">
                 <div>
