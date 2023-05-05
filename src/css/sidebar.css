@@ -1,5 +1,5 @@
 #sidebar {
-    --indent-unit: 0.5rem;
+    --indent-unit: 1.2rem;
     --button-font: 0.9rem;
 }
 
@@ -9,12 +9,8 @@
     justify-content: flex-start;
 }
 
-.sidebar-menu-depth-2 {
+.sidebar-node {
     margin-left: var(--indent-unit);
-}
-
-.sidebar-menu-depth-3 {
-    margin-left: calc(2 * var(--indent-unit));
 }
 
 #sidebar li > button {

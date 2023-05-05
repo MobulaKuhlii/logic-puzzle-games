@@ -42,6 +42,7 @@ class Sidebar extends React.Component<SidebarT.Props, SidebarT.State> {
             return (
                 <>
                     {depth > 0 && (
+                        // despite warning - this is fine, array won't be mutated
                         <li key={key}>
                             <button type="button" onClick={() => handleClick(node)}>{value}</button>
                         </li>
@@ -64,7 +65,7 @@ class Sidebar extends React.Component<SidebarT.Props, SidebarT.State> {
                 );
             }
             return !node.hidden && (
-                <menu className={"sidebar-menu-depth-" + node.depth.toString()}>
+                <menu className={node.depth > 1 ? "sidebar-node" : ""}>
                     {buildMenu(node, key)}
                 </menu>
             );
