@@ -23,7 +23,7 @@ class SudokuGrid extends React.Component<GameWithPanelT.Synced> {
                                     className={
                                         (y > 0 ? "" : "bordered-top") +
                                         (y > 0 || x > 0 ? "" : " ") +
-                                        (x > 0 ? "" : "bordered-left")
+                                        (x > 0 ? "" : "bordered-left") || null
                                     }
                                     synced={this.props.synced}
                                     getIndex={() => game.getIndex(y, x)}
