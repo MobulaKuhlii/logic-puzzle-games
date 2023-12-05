@@ -1,11 +1,12 @@
 {
-    "include": [ "src/**/*" ],
     "compilerOptions": {
         "allowJs": false,
         "allowSyntheticDefaultImports": true,
+        "noImplicitAny": true,
+        "strict": false,
         "jsx": "react",
         "module": "es6",
-        "strict": false,
-        "target": "es6"
+        "target": "es6",
+        "moduleResolution": "node"
     }
 }

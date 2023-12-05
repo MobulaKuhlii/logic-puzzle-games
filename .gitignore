@@ -3,6 +3,6 @@ node_modules
 # lock file
 package-lock.json
 # TODOs
-*TODO
+*TODO.txt
 # sketch graphics
 sketches

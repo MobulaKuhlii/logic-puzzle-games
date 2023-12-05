@@ -1,0 +1,21 @@
+import React from "react";
+import { render, screen } from "@testing-library/react";
+import "@testing-library/jest-dom";
+import App from "../src/user-interface/app";
+
+
+type CellArg = {
+    y: number, x: number, index: number,
+    method: "input" | "select"
+};
+
+function setCell({y, x, index, method = "input"}: CellArg) {
+    // get the cell element
+    // click on it
+    // input or select from list
+}
+
+
+test("locks cell and tries to change its value", () => {
+    setCell({y: 0, x: 0, index: 1, method: "select"});
+});

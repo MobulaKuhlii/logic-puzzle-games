@@ -1,4 +1,5 @@
 import React from "react";
+// import { BrowserRouter, Route } from "react-router-dom";
 import AppT from "../types/user-interface/app";
 import SidebarT from "../types/user-interface/sidebar";
 import Sidebar from "./sidebar";
@@ -50,7 +51,7 @@ const sidebarRoot: SidebarT.Block = [
 ];
 
 
-class App extends React.Component<Record<string, never>, AppT.State> {
+export default class App extends React.Component<Record<string, never>, AppT.State> {
     constructor(props: Record<string, never>) {
         super(props);
         this.state = {
@@ -116,5 +117,3 @@ class App extends React.Component<Record<string, never>, AppT.State> {
         );
     }
 }
-
-export default App;

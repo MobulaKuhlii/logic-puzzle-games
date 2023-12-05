@@ -4,7 +4,7 @@ import "../css/sidebar.css";
 
 
 class Sidebar extends React.Component<SidebarT.Props, SidebarT.State> {
-    private _buildNestedMenu: (node: SidebarT.Node, key?: number) => React.ReactNode;
+    private _buildNestedMenu: (node: SidebarT.Node, key?: string) => React.ReactNode;
 
     constructor(props: SidebarT.Props) {
         super(props);
@@ -37,22 +37,26 @@ class Sidebar extends React.Component<SidebarT.Props, SidebarT.State> {
             this.props.handleClick(node);
         }
 
-        const buildMenu = (node: SidebarT.Node, key: number): React.ReactNode => {
+        const buildMenu = (node: SidebarT.Node, key: string): React.ReactNode => {
             const {value, depth, children} = node;
+            /*
+                despite the console warning, the keys are unique,
+                which can be checked by uncommenting the line below
+            */
+            // console.log(key);
             return (
-                <>
+                <React.Fragment key={key}>
                     {depth > 0 && (
-                        // despite the console warning this key is fine, array won't be mutated
-                        <li key={key}>
+                        <li>
                             <button type="button" onClick={() => handleClick(node)}>{value}</button>
                         </li>
                     )}
-                    {children.map(buildNestedMenu)}
-                </>
+                    {children.map((ch, idx) => buildNestedMenu(ch, key + idx.toString()))}
+                </React.Fragment>
             );
         }
 
-        const buildNestedMenu = (node: SidebarT.Node, key = 0): React.ReactNode => {
+        const buildNestedMenu = (node: SidebarT.Node, key = "R"): React.ReactNode => {
             if(node.depth < 1) {
                 return (
                     <div id={

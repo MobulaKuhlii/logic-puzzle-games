@@ -2,7 +2,7 @@ version: "3"
 
 services:
   node:
-    image: node:19-alpine
+    image: node:20-alpine
     user: node
     working_dir: /home/node/app
     volumes:
